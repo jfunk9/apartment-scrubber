@@ -1,0 +1,27 @@
+priority,name,neighborhood,address,website,listings_url,scraper_key,verified,amenity_tier,character_tier,parking_included,utilities_note,skyway,vintage_year,notes
+P1,North Loop Green 360,North Loop,360 N 5th St Minneapolis MN,https://nlg360.com/,https://nlg360.com/floorplans/,generic,no,5,4,no,water+trash,no,2024,Newest tier-1 luxury; rooftop pool deck overlooks river
+P1,Hewing Residences,North Loop,300 N Washington Ave Minneapolis MN,https://www.thehewingresidences.com/,https://www.thehewingresidences.com/floorplans,generic,no,5,5,no,none,no,2024,Boutique above Hewing Hotel; design-forward
+P1,The Hall Lofts (Newell/Falk/Martin),North Loop,Washington Ave N Minneapolis MN,https://livethehalllofts.com/,https://livethehalllofts.com/availability,generic,no,4,5,no,water,no,2022,Three buildings; warehouse conversion + new build mix
+P1,Junction Flats,North Loop,643 N 5th St Minneapolis MN,https://www.junctionflats.com/,https://www.junctionflats.com/availability,generic,no,4,4,extra,water,no,2014,Saturday farmer's market doorstep
+P1,LPM Apartments,Loring Park,30 S 11th St Minneapolis MN,https://lpmapts.com/,https://lpmapts.com/availability,generic,no,5,4,extra,water+trash,no,2014,Loring Park views; 36-story tower
+P1,365 Nicollet,Core Downtown,365 Nicollet Mall Minneapolis MN,https://www.365nicollet.com/,https://www.365nicollet.com/floor-plans,generic,no,5,4,extra,water+trash,yes,2019,Golf sim+jacuzzi spa+skyway coworking
+P1,4Marq,Core Downtown,400 Marquette Ave Minneapolis MN,https://www.4marqapartments.com/,https://www.4marqapartments.com/availability,generic,no,5,3,extra,water+trash,yes,2015,Floor-to-ceiling windows; central CBD
+P1,Nic on 5th,Core Downtown,465 Nicollet Mall Minneapolis MN,https://www.nicon5thapartments.com/,https://www.nicon5thapartments.com/floorplans,generic,no,5,4,extra,water+trash,yes,2014,26-story luxury; stadium+Target Field adjacent
+P1,Encore,Mill District,170 5th Ave S Minneapolis MN,https://mplsencore.com/,https://mplsencore.com/floor-plans/,generic,no,5,4,extra,water+trash,no,2017,Guthrie-adjacent riverbank
+P1,Cortland Mill District (Latitude 45),Mill District,313 Washington Ave S Minneapolis MN,https://www.cortland.com/apartments/cortland-mill-district/,https://www.cortland.com/apartments/cortland-mill-district/floor-plans/,generic,no,5,4,extra,water+trash,no,2015,Renamed from Latitude 45; 13-story
+P1,Mill District City Apartments,Mill District,222 Park Ave S Minneapolis MN,https://www.milldistrictapts.com/,https://www.milldistrictapts.com/availability,generic,no,4,4,extra,water+trash,no,2015,Walking distance to Stone Arch
+P2,SECOND + SECOND,North Loop,205 Park Ave Minneapolis MN,https://secondandsecond.com/,https://secondandsecond.com/floor-plans/,generic,no,4,5,extra,water,no,2019,Loft layouts; modern finish
+P2,NoLo,North Loop,128 Washington Ave N Minneapolis MN,https://www.nololiving.com/,https://www.nololiving.com/floor-plans,generic,no,4,5,extra,water,no,2017,Contemporary luxury heart of NoLo
+P2,Intersect,North Loop,Washington Ave N Minneapolis MN,https://www.intersectmpls.com/,https://www.intersectmpls.com/floorplans,generic,no,4,4,extra,water,no,2023,Boutique sustainable
+P2,Borealis,North Loop,Washington Ave N Minneapolis MN,https://www.borealismpls.com/,https://www.borealismpls.com/floorplans,generic,no,4,4,extra,water,no,2023,Newer boutique
+P2,724 Lofts,North Loop,724 N 1st St Minneapolis MN,https://724lofts.com/,https://724lofts.com/availability,generic,no,3,5,extra,water,no,1900,Historic warehouse loft conversion
+P2,Itasca Lofts,North Loop,708 N 1st St Minneapolis MN,https://www.itascalofts.com/,https://www.itascalofts.com/floorplans,generic,no,2,5,extra,none,no,1886,Original 1886 brick; first MPLS loft conversion; mostly condo - check rental availability
+P2,Dock Street Flats,North Loop,5th Ave N Minneapolis MN,https://www.dockstreetflats.com/,https://www.dockstreetflats.com/availability,generic,no,4,4,extra,water,no,2013,Riverside; quiet end of NoLo
+P2,The Vicinity,Mill District,425 S 2nd St Minneapolis MN,https://www.vicinityapts.com/,https://www.vicinityapts.com/floorplans,generic,no,4,4,extra,water,no,2019,Walking to Mill Ruins Park
+P2,Mill City Quarter,Mill District,Park Ave S Minneapolis MN,https://www.millcityquarter.com/,https://www.millcityquarter.com/floorplans,generic,no,4,3,extra,water+trash,no,2015,Steps from Mill City Museum
+P2,Variant,Core Downtown,5th St Minneapolis MN,https://www.variantmpls.com/,https://www.variantmpls.com/floor-plans,generic,no,4,4,extra,water+trash,partial,2017,Mixed character; some skyway access
+P2,The Lyndy,Loring Park,1300 Lasalle Ave Minneapolis MN,https://www.thelyndy.com/,https://www.thelyndy.com/floorplans,generic,no,4,4,extra,water,no,2017,Loring Park adjacent
+P2,The Marquette,Elliot Park,200 S 11th St Minneapolis MN,https://www.themarquetteapts.com/,https://www.themarquetteapts.com/availability,generic,no,3,4,extra,water,no,2017,Elliot Park edge
+P2,1010 LaSalle,Loring Park,1010 Lasalle Ave Minneapolis MN,https://www.1010lasalle.com/,https://www.1010lasalle.com/floorplans,generic,no,3,3,extra,water,no,2014,Direct Loring Park access
+P3,Riverwalk Lofts,North Loop,Riverwalk Minneapolis MN,https://www.riverwalklofts.com/,https://www.riverwalklofts.com/availability,generic,no,2,5,extra,none,no,2002,Riverfront timber loft; rare rentals
+P3,Groove Lofts,Mill District,Park Ave Minneapolis MN,https://www.groovelofts.com/,https://www.groovelofts.com/availability,generic,no,2,4,extra,water,no,2008,Character loft conversion
