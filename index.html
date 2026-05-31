@@ -52,6 +52,8 @@
   .constraint { display: inline-block; margin-top: 3px; padding: 2px 7px; border-radius: 4px; font-size: 11px; background: rgba(240,200,120,0.12); color: var(--warn); border: 1px solid rgba(240,200,120,0.3); }
   .safety { display: inline-block; margin-top: 3px; padding: 2px 7px; border-radius: 4px; font-size: 11px; background: rgba(240,138,138,0.10); color: var(--bad); border: 1px solid rgba(240,138,138,0.3); }
   .bnote { color: var(--ink-dim); font-size: 11px; margin-top: 3px; font-style: italic; }
+  tr.stub td { opacity: 0.65; }
+  .stub-tag { display: inline-block; margin-left: 6px; padding: 1px 6px; border-radius: 4px; font-size: 10px; background: rgba(154,161,173,0.15); color: var(--ink-dim); border: 1px solid var(--line); }
   .breakdown {
     display: none;
     position: absolute;
@@ -207,13 +209,14 @@
       let safetyTxt = null, bnote = r.building_notes || "";
       const m = bnote.match(/Safety:\s*([^.]+\.?)/i);
       if (m) { safetyTxt = m[1].trim(); bnote = bnote.replace(m[0], "").trim().replace(/^[.\s]+/, ""); }
+      if (r.is_stub) tr.classList.add("stub");
       tr.innerHTML = `
         <td class="fit-cell">
           <span class="pill fit-pill ${fitClass(r.fit||0)}">${r.fit ?? "?"}</span>
           <div class="breakdown">${bdHtml}</div>
         </td>
         <td>
-          <div>${r.jason_favorite ? '<span class="star" title="Jason favorite">★</span>' : ""}<b>${r.building}</b>${r.unit_name ? ` · ${r.unit_name}` : ""}</div>
+          <div>${r.jason_favorite ? '<span class="star" title="Jason favorite">★</span>' : ""}<b>${r.building}</b>${r.unit_name ? ` · ${r.unit_name}` : ""}${r.is_stub ? '<span class="stub-tag">stub</span>' : ""}</div>
           <div class="neigh">${r.neighborhood || ""}${r.skyway === "yes" ? " · skyway" : ""}</div>
           ${r.unit_filter ? `<div class="constraint">⚠ ${r.unit_filter}</div>` : ""}
           ${safetyTxt ? `<div class="safety">Safety: ${safetyTxt}</div>` : ""}

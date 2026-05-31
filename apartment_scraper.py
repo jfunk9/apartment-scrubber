@@ -521,7 +521,39 @@ def run(building_filter: str = None, dry_run: bool = False, debug: bool = False)
             continue
         try:
             listings = scrape_building(row, debug=debug)
-            all_listings.extend(listings)
+            if listings:
+                all_listings.extend(listings)
+            else:
+                # Stub row so every building is visible in the dashboard.
+                # FIT is computed against a placeholder 1BR @ $2,000.
+                stub_unit = {"layout": "1br", "rent": 2000}
+                stub_unit["all_in_cost"] = estimate_all_in(row, 2000)
+                fit = compute_fit(row, stub_unit)
+                all_listings.append({
+                    "building": row.get("name"),
+                    "unit_name": "no units parsed - check listings page",
+                    "layout": "unknown",
+                    "rent": None,
+                    "sqft": None,
+                    "beds": None,
+                    "all_in_cost": None,
+                    "url": row.get("listings_url") or row.get("website"),
+                    "neighborhood": row.get("neighborhood"),
+                    "address": row.get("address"),
+                    "amenity_tier": row.get("amenity_tier"),
+                    "character_tier": row.get("character_tier"),
+                    "parking_included": row.get("parking_included"),
+                    "utilities_note": row.get("utilities_note"),
+                    "vintage_year": row.get("vintage_year"),
+                    "west_view_potential": row.get("west_view_potential"),
+                    "skyway": row.get("skyway"),
+                    "building_notes": row.get("notes"),
+                    "jason_favorite": (row.get("jason_favorite") or "").strip().lower() == "yes",
+                    "unit_filter": (row.get("unit_filter") or "").strip(),
+                    "fit": fit["score"],
+                    "fit_breakdown": fit["breakdown"],
+                    "is_stub": True,
+                })
         except Exception as e:
             print(f"  [error] {row.get('name')}: {e}")
             continue
@@ -565,6 +597,59 @@ def main():
     ap.add_argument("--debug", action="store_true", help="Save rendered HTML to _debug/")
     args = ap.parse_args()
     run(building_filter=args.building, dry_run=args.dry_run, debug=args.debug)
+
+
+if __name__ == "__main__":
+    main()
+ue,
+                })
+        except Exception as e:
+            print(f"  [error] {row.get('name')}: {e}")
+            continue
+        time.sleep(1.0)  # be polite
+
+    # Sort by FIT desc
+    all_listings.sort(key=lambda u: u.get("fit", 0), reverse=True)
+
+    output = {
+        "generated_at": datetime.now(timezone.utc).isoformat(),
+        "ceiling_all_in": ALL_IN_CEILING,
+        "fit_matrix": {k: v["weight"] for k, v in FIT_MATRIX.items()},
+        "neighborhood_rank": NEIGHBORHOOD_RANK,
+        "buildings_scanned": len(buildings),
+        "listings": all_listings,
+    }
+
+    if dry_run:
+        print(json.dumps(output, indent=2)[:2000])
+        return
+
+    OUTPUT_JSON.write_text(json.dumps(output, indent=2), encoding="utf-8")
+    print(f"\nWrote {len(all_listings)} listings -> {OUTPUT_JSON}")
+
+    if GITHUB_PAGES_REPO.exists():
+        try:
+            shutil.copy2(OUTPUT_JSON, GITHUB_PAGES_REPO / "listings.json")
+            index = HERE / "index.html"
+            if index.exists():
+                shutil.copy2(index, GITHUB_PAGES_REPO / "index.html")
+            print(f"Mirrored to {GITHUB_PAGES_REPO}")
+        except Exception as e:
+            print(f"  [warn] failed to mirror to GitHub repo: {e}")
+
+
+def main():
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--building", help="Substring match a single building name")
+    ap.add_argument("--dry-run", action="store_true", help="Print JSON, don't write")
+    ap.add_argument("--debug", action="store_true", help="Save rendered HTML to _debug/")
+    args = ap.parse_args()
+    run(building_filter=args.building, dry_run=args.dry_run, debug=args.debug)
+
+
+if __name__ == "__main__":
+    main()
+debug)
 
 
 if __name__ == "__main__":
