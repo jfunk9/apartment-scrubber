@@ -1,6 +1,12 @@
 name: Apartment Radar
 
 on:
+  push:
+    branches: [main]
+    paths:
+      - 'buildings.csv'
+      - 'apartment_scraper.py'
+      - '.github/workflows/scrape.yml'
   schedule:
     # Weekly on Monday at 12:00 UTC (7am Central). Apartments turn slower than jobs.
     - cron: "0 12 * * 1"
