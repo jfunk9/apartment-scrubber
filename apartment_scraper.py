@@ -231,7 +231,7 @@ def fetch_js(url: str, wait_ms: int = 4500, scroll: bool = True):
                 "Chrome/124.0.0.0 Safari/537.36"
             ))
             page = ctx.new_page()
-            page.goto(url, wait_until="networkidle", timeout=30000)
+            page.goto(url, wait_until="networkidle", timeout=60000)
             page.wait_for_timeout(wait_ms)
             if scroll:
                 # Scroll to load lazy unit cards
