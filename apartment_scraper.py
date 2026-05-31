@@ -474,6 +474,8 @@ def scrape_building(row: dict, debug: bool = False):
         u["vintage_year"] = row.get("vintage_year")
         u["building_notes"] = row.get("notes")
         u["skyway"] = row.get("skyway")
+        u["jason_favorite"] = (row.get("jason_favorite") or "").strip().lower() == "yes"
+        u["unit_filter"] = (row.get("unit_filter") or "").strip()
         kept.append(u)
 
     print(f"  found {len(units)} candidate cards, kept {len(kept)} after filters")
