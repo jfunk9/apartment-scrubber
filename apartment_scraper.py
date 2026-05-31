@@ -78,19 +78,23 @@ GEO_WHITELIST = {"North Loop", "Mill District", "Loring Park", "Elliot Park", "C
 
 FIT_MATRIX = {
     "amenities": {
-        "weight": 28,
-        "source": "building",   # comes from buildings.csv amenity_tier (1-5)
+        "weight": 26,
+        "source": "building",   # buildings.csv amenity_tier (1-5)
     },
     "character": {
-        "weight": 26,
-        "source": "building",   # buildings.csv character_tier (1-5)
+        "weight": 20,
+        "source": "building",   # buildings.csv character_tier (1-5) — architectural character only
     },
     "cost_fit": {
         "weight": 15,
         "source": "computed",   # how far under $2500 all-in
     },
-    "neighborhood": {
+    "west_view_potential": {
         "weight": 12,
+        "source": "building",   # buildings.csv west_view_potential (1-5) — west-facing high-floor open sightline
+    },
+    "neighborhood": {
+        "weight": 10,
         "source": "computed",   # ranked Jason preference
     },
     "layout_fit": {
@@ -98,11 +102,11 @@ FIT_MATRIX = {
         "source": "computed",   # studio_loft / 1br / 1br_den preferred
     },
     "vintage": {
-        "weight": 5,
+        "weight": 4,
         "source": "computed",   # bonus for historic OR signature-new
     },
     "parking_included": {
-        "weight": 4,
+        "weight": 3,
         "source": "building",   # bonus if parking is bundled
     },
 }
@@ -326,6 +330,13 @@ def compute_fit(building: dict, unit: dict) -> dict:
     char = int(building.get("character_tier") or 3)
     breakdown["character"] = round(FIT_MATRIX["character"]["weight"] * (char / 5.0), 1)
 
+    # West view potential (building-driven, 1-5)
+    try:
+        wv = int(building.get("west_view_potential") or 3)
+    except Exception:
+        wv = 3
+    breakdown["west_view_potential"] = round(FIT_MATRIX["west_view_potential"]["weight"] * (wv / 5.0), 1)
+
     # Cost fit: 1.0 if all-in <= $2200, decays to 0 at $2800
     all_in = unit.get("all_in_cost") or 9999
     if all_in <= 2200:
@@ -472,6 +483,7 @@ def scrape_building(row: dict, debug: bool = False):
         u["parking_included"] = row.get("parking_included")
         u["utilities_note"] = row.get("utilities_note")
         u["vintage_year"] = row.get("vintage_year")
+        u["west_view_potential"] = row.get("west_view_potential")
         u["building_notes"] = row.get("notes")
         u["skyway"] = row.get("skyway")
         u["jason_favorite"] = (row.get("jason_favorite") or "").strip().lower() == "yes"
@@ -543,6 +555,21 @@ def run(building_filter: str = None, dry_run: bool = False, debug: bool = False)
                 shutil.copy2(index, GITHUB_PAGES_REPO / "index.html")
             print(f"Mirrored to {GITHUB_PAGES_REPO}")
         except Exception as e:
+            print(f"  [warn] failed to mirror to GitHub repo: {e}")
+
+
+def main():
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--building", help="Substring match a single building name")
+    ap.add_argument("--dry-run", action="store_true", help="Print JSON, don't write")
+    ap.add_argument("--debug", action="store_true", help="Save rendered HTML to _debug/")
+    args = ap.parse_args()
+    run(building_filter=args.building, dry_run=args.dry_run, debug=args.debug)
+
+
+if __name__ == "__main__":
+    main()
+e:
             print(f"  [warn] failed to mirror to GitHub repo: {e}")
 
 
