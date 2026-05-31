@@ -1,0 +1,232 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Apartment Radar — Downtown Minneapolis</title>
+<style>
+  :root {
+    --bg: #0f1115;
+    --panel: #181a21;
+    --panel-2: #20232c;
+    --line: #2a2f3a;
+    --ink: #e8eaef;
+    --ink-dim: #9aa1ad;
+    --accent: #8ec3ff;
+    --good: #8ad79d;
+    --warn: #f0c878;
+    --bad: #f08a8a;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: var(--bg); color: var(--ink); font: 14px/1.45 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+  header { padding: 28px 24px 18px; border-bottom: 1px solid var(--line); }
+  header h1 { margin: 0 0 6px; font-size: 22px; letter-spacing: 0.2px; }
+  header p { margin: 0; color: var(--ink-dim); font-size: 13px; }
+  main { max-width: 1300px; margin: 0 auto; padding: 18px 24px 60px; }
+  .toolbar { display: flex; gap: 10px; flex-wrap: wrap; margin: 12px 0 18px; align-items: center; }
+  .chip {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    color: var(--ink);
+    border-radius: 999px;
+    padding: 6px 12px;
+    cursor: pointer;
+    font-size: 12px;
+    user-select: none;
+  }
+  .chip.active { background: var(--accent); color: #08111c; border-color: var(--accent); }
+  .grid { display: grid; grid-template-columns: 1fr 320px; gap: 18px; }
+  @media (max-width: 1000px) { .grid { grid-template-columns: 1fr; } }
+
+  table { width: 100%; border-collapse: collapse; background: var(--panel); border: 1px solid var(--line); border-radius: 10px; overflow: hidden; }
+  th, td { padding: 10px 12px; text-align: left; vertical-align: top; border-bottom: 1px solid var(--line); font-size: 13px; }
+  th { background: var(--panel-2); font-weight: 600; color: var(--ink-dim); text-transform: uppercase; font-size: 11px; letter-spacing: 0.5px; cursor: pointer; }
+  tr:last-child td { border-bottom: none; }
+  .num { text-align: right; font-variant-numeric: tabular-nums; }
+  .pill { display: inline-block; padding: 2px 8px; border-radius: 999px; font-size: 11px; font-weight: 600; }
+  .fit-pill { background: rgba(138,215,157,0.12); color: var(--good); border: 1px solid rgba(138,215,157,0.3); }
+  .fit-pill.mid { background: rgba(240,200,120,0.12); color: var(--warn); border-color: rgba(240,200,120,0.3); }
+  .fit-pill.low { background: rgba(240,138,138,0.12); color: var(--bad); border-color: rgba(240,138,138,0.3); }
+  .neigh { color: var(--ink-dim); font-size: 12px; }
+  .breakdown {
+    display: none;
+    position: absolute;
+    background: var(--panel-2);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 10px 12px;
+    font-size: 11px;
+    min-width: 220px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+    z-index: 10;
+  }
+  .fit-cell:hover .breakdown { display: block; }
+  .fit-cell { position: relative; }
+  .breakdown-row { display: flex; justify-content: space-between; padding: 2px 0; color: var(--ink-dim); }
+  .breakdown-row b { color: var(--ink); font-weight: 500; }
+
+  aside { display: flex; flex-direction: column; gap: 14px; }
+  .panel { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 14px 16px; }
+  .panel h3 { margin: 0 0 8px; font-size: 13px; text-transform: uppercase; letter-spacing: 0.5px; color: var(--ink-dim); }
+  .panel p, .panel li { font-size: 13px; color: var(--ink); margin: 4px 0; }
+  .panel ul { padding-left: 18px; margin: 6px 0; }
+  .panel.blindspots li { color: var(--ink); }
+  .panel.blindspots li b { color: var(--warn); }
+  .kpi { font-size: 22px; font-weight: 600; }
+  .meta { color: var(--ink-dim); font-size: 12px; }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  .empty { padding: 30px; text-align: center; color: var(--ink-dim); font-style: italic; }
+</style>
+</head>
+<body>
+<header>
+  <h1>Apartment Radar — Downtown Minneapolis</h1>
+  <p id="meta">Loading…</p>
+</header>
+<main>
+  <div class="toolbar" id="filters"></div>
+  <div class="grid">
+    <div>
+      <table id="tbl">
+        <thead>
+          <tr>
+            <th data-sort="fit">FIT</th>
+            <th data-sort="building">Building / Unit</th>
+            <th data-sort="layout">Layout</th>
+            <th class="num" data-sort="rent">Rent</th>
+            <th class="num" data-sort="sqft">SqFt</th>
+            <th class="num" data-sort="all_in_cost">All-in</th>
+          </tr>
+        </thead>
+        <tbody id="rows"></tbody>
+      </table>
+      <div id="empty" class="empty" style="display:none">
+        No listings parsed yet. Run <code>python apartment_scraper.py</code> to populate <code>listings.json</code>.
+      </div>
+    </div>
+
+    <aside>
+      <div class="panel">
+        <h3>What you're optimizing for</h3>
+        <p><b>Amenities</b> (28) + <b>Character/Light</b> (26) drive ~54% of FIT. Cost, neighborhood, layout, vintage, parking round it out.</p>
+        <p class="meta">Ceiling: $2,500 all-in (rent + parking + utilities + internet). 8% grace.</p>
+      </div>
+
+      <div class="panel blindspots">
+        <h3>Blindspots to consider</h3>
+        <ul>
+          <li><b>20 years in Uptown.</b> You've never lived without a 1-block lake walk. Stone Arch + Mississippi riverfront is your closest Downtown analog — favor North Loop/Mill District for water access.</li>
+          <li><b>Skyway dependency.</b> Game-changer Nov–March. You've never had it. Worth a winter walk-test before committing to a non-skyway building.</li>
+          <li><b>Stadium effect.</b> Mill District/Downtown East = 10x/year Vikings home-game chaos. North Loop is far enough that this matters less.</li>
+          <li><b>Music-producer logistics.</b> 20th-floor luxury = one freight elevator. Gear hauls, late-night neighbor risk, concrete vs drywall matters for both directions.</li>
+          <li><b>Hidden fees.</b> Luxury towers love amenity fees ($30–75/mo), valet trash ($25), pet rent. Always ask for the "true monthly" number, not just rent.</li>
+          <li><b>Vintage trap.</b> 2015–2020 luxury buildings have great amenities but thin walls. Pre-1950 conversions (Itasca, Riverwalk, 724 Lofts) are concrete/timber and quieter — at the cost of fewer amenities.</li>
+          <li><b>Lease length.</b> Class-A towers push 13–15mo leases to hide turn vacancy. Ask up front; 12mo is negotiable on a slow week.</li>
+          <li><b>Transition cost.</b> 20 years of accumulated stuff. Budget a real moving cost + Goodwill purge. Lakehaus → next place is the rare honest test.</li>
+        </ul>
+      </div>
+
+      <div class="panel">
+        <h3>Reference: your current setup</h3>
+        <p>2900 Lagoon (Uptown) · 1BR · $2,100 rent · $150 parking · $150 electric · $80 internet = <b>$2,480/mo all-in</b></p>
+        <p class="meta">Avg tenure history: 3 years. Lakehaus was the favorite — top-tier amenities benchmark.</p>
+      </div>
+    </aside>
+  </div>
+</main>
+
+<script>
+  let DATA = null;
+  let FILTERS = new Set(); // active neighborhood chips
+  let SORT_KEY = "fit";
+  let SORT_DIR = -1;
+
+  function fmt$(n) { return n == null ? "—" : "$" + n.toLocaleString(); }
+  function fitClass(n) { return n >= 75 ? "" : n >= 60 ? "mid" : "low"; }
+  function layoutLabel(l) {
+    return { studio_loft: "Studio/Loft", "1br": "1BR", "1br_den": "1BR + Den", unknown: "?" }[l] || l;
+  }
+
+  function render() {
+    const meta = document.getElementById("meta");
+    if (!DATA) { meta.textContent = "No data yet."; return; }
+    const date = new Date(DATA.generated_at).toLocaleString();
+    meta.innerHTML = `Last scraped <b>${date}</b> · ${DATA.buildings_scanned} buildings · ${DATA.listings.length} listings under $${DATA.ceiling_all_in} all-in`;
+
+    // Neighborhood chips
+    const neighs = [...new Set(DATA.listings.map(l => l.neighborhood).filter(Boolean))].sort();
+    const filt = document.getElementById("filters");
+    filt.innerHTML = "";
+    const allChip = document.createElement("div");
+    allChip.className = "chip" + (FILTERS.size === 0 ? " active" : "");
+    allChip.textContent = "All";
+    allChip.onclick = () => { FILTERS.clear(); render(); };
+    filt.appendChild(allChip);
+    for (const n of neighs) {
+      const c = document.createElement("div");
+      c.className = "chip" + (FILTERS.has(n) ? " active" : "");
+      c.textContent = n;
+      c.onclick = () => { FILTERS.has(n) ? FILTERS.delete(n) : FILTERS.add(n); render(); };
+      filt.appendChild(c);
+    }
+
+    let rows = DATA.listings.slice();
+    if (FILTERS.size > 0) rows = rows.filter(r => FILTERS.has(r.neighborhood));
+    rows.sort((a, b) => {
+      const av = a[SORT_KEY] ?? -Infinity, bv = b[SORT_KEY] ?? -Infinity;
+      if (typeof av === "string") return SORT_DIR * av.localeCompare(bv);
+      return SORT_DIR * (av - bv);
+    });
+
+    const tbody = document.getElementById("rows");
+    const empty = document.getElementById("empty");
+    tbody.innerHTML = "";
+    if (rows.length === 0) { empty.style.display = "block"; return; }
+    empty.style.display = "none";
+
+    for (const r of rows) {
+      const tr = document.createElement("tr");
+      const bd = r.fit_breakdown || {};
+      const bdHtml = Object.entries(bd).map(([k, v]) =>
+        `<div class="breakdown-row"><span>${k.replace(/_/g, " ")}</span><b>${v}</b></div>`
+      ).join("");
+      tr.innerHTML = `
+        <td class="fit-cell">
+          <span class="pill fit-pill ${fitClass(r.fit||0)}">${r.fit ?? "?"}</span>
+          <div class="breakdown">${bdHtml}</div>
+        </td>
+        <td>
+          <div><b>${r.building}</b> ${r.unit_name ? ` · ${r.unit_name}` : ""}</div>
+          <div class="neigh">${r.neighborhood || ""}${r.skyway === "yes" ? " · skyway" : ""}</div>
+          <div class="neigh"><a href="${r.url}" target="_blank" rel="noopener">view listing →</a></div>
+        </td>
+        <td>${layoutLabel(r.layout)}</td>
+        <td class="num">${fmt$(r.rent)}</td>
+        <td class="num">${r.sqft || "—"}</td>
+        <td class="num">${fmt$(r.all_in_cost)}</td>
+      `;
+      tbody.appendChild(tr);
+    }
+  }
+
+  // Sortable headers
+  document.querySelectorAll("th[data-sort]").forEach(th => {
+    th.onclick = () => {
+      const k = th.dataset.sort;
+      SORT_DIR = (SORT_KEY === k) ? -SORT_DIR : -1;
+      SORT_KEY = k;
+      render();
+    };
+  });
+
+  fetch("listings.json")
+    .then(r => r.json())
+    .then(d => { DATA = d; render(); })
+    .catch(() => {
+      DATA = { generated_at: new Date().toISOString(), buildings_scanned: 0, ceiling_all_in: 2500, listings: [] };
+      render();
+    });
+</script>
+</body>
+</html>

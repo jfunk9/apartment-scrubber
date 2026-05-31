@@ -1,0 +1,22 @@
+{
+  "generated_at": "2026-05-31T00:00:00+00:00",
+  "ceiling_all_in": 2500,
+  "fit_matrix": {
+    "amenities": 28,
+    "character": 26,
+    "cost_fit": 15,
+    "neighborhood": 12,
+    "layout_fit": 10,
+    "vintage": 5,
+    "parking_included": 4
+  },
+  "neighborhood_rank": {
+    "North Loop": 1.0,
+    "Mill District": 0.95,
+    "Loring Park": 0.85,
+    "Elliot Park": 0.80,
+    "Core Downtown": 0.75
+  },
+  "buildings_scanned": 0,
+  "listings": []
+}
