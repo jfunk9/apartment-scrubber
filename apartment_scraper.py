@@ -607,12 +607,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-le building name")
-    ap.add_argument("--dry-run", action="store_true", help="Print JSON, don't write")
-    ap.add_argument("--debug", action="store_true", help="Save rendered HTML to _debug/")
-    args = ap.parse_args()
-    run(building_filter=args.building, dry_run=args.dry_run, debug=args.debug)
-
-
-if __name__ == "__main__":
-    main()
