@@ -494,6 +494,7 @@ def scrape_building(row: dict, debug: bool = False):
         u["skyway"] = row.get("skyway")
         u["jason_favorite"] = (row.get("jason_favorite") or "").strip().lower() == "yes"
         u["unit_filter"] = (row.get("unit_filter") or "").strip()
+        u["current_deal"] = (row.get("current_deal") or "").strip()
         kept.append(u)
 
     print(f"  found {len(units)} candidate cards, kept {len(kept)} after filters")
@@ -530,19 +531,23 @@ def run(building_filter: str = None, dry_run: bool = False, debug: bool = False)
             if listings:
                 all_listings.extend(listings)
             else:
-                # Stub row so every building is visible in the dashboard.
-                # FIT is computed against a placeholder 1BR @ $2,000.
-                stub_unit = {"layout": "1br", "rent": 2000}
-                stub_unit["all_in_cost"] = estimate_all_in(row, 2000)
+                # Stub row so every building is visible. Use researched_rent if present, else $2000 placeholder.
+                try:
+                    rr = int(row.get("researched_rent") or 0)
+                except Exception:
+                    rr = 0
+                base_rent = rr if rr > 0 else 2000
+                stub_unit = {"layout": "1br", "rent": base_rent}
+                stub_unit["all_in_cost"] = estimate_all_in(row, base_rent)
                 fit = compute_fit(row, stub_unit)
                 all_listings.append({
                     "building": row.get("name"),
-                    "unit_name": "no units parsed - check listings page",
-                    "layout": "unknown",
-                    "rent": None,
+                    "unit_name": "researched rent (no live parse)" if rr else "no units parsed - check listings page",
+                    "layout": "1br" if rr else "unknown",
+                    "rent": rr if rr else None,
                     "sqft": None,
                     "beds": None,
-                    "all_in_cost": None,
+                    "all_in_cost": stub_unit["all_in_cost"] if rr else None,
                     "url": row.get("listings_url") or row.get("website"),
                     "neighborhood": row.get("neighborhood"),
                     "address": row.get("address"),
@@ -556,6 +561,7 @@ def run(building_filter: str = None, dry_run: bool = False, debug: bool = False)
                     "building_notes": row.get("notes"),
                     "jason_favorite": (row.get("jason_favorite") or "").strip().lower() == "yes",
                     "unit_filter": (row.get("unit_filter") or "").strip(),
+                    "current_deal": (row.get("current_deal") or "").strip(),
                     "fit": fit["score"],
                     "fit_breakdown": fit["breakdown"],
                     "is_stub": True,
