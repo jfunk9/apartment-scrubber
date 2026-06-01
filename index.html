@@ -54,6 +54,7 @@
   .bnote { color: var(--ink-dim); font-size: 11px; margin-top: 3px; font-style: italic; }
   tr.stub td { opacity: 0.65; }
   .stub-tag { display: inline-block; margin-left: 6px; padding: 1px 6px; border-radius: 4px; font-size: 10px; background: rgba(154,161,173,0.15); color: var(--ink-dim); border: 1px solid var(--line); }
+  .deal { display: inline-block; margin-top: 3px; padding: 2px 7px; border-radius: 4px; font-size: 11px; background: rgba(138,215,157,0.12); color: var(--good); border: 1px solid rgba(138,215,157,0.3); }
   .breakdown {
     display: none;
     position: absolute;
@@ -219,6 +220,7 @@
           <div>${r.jason_favorite ? '<span class="star" title="Jason favorite">★</span>' : ""}<b>${r.building}</b>${r.unit_name ? ` · ${r.unit_name}` : ""}${r.is_stub ? '<span class="stub-tag">stub</span>' : ""}</div>
           <div class="neigh">${r.neighborhood || ""}${r.skyway === "yes" ? " · skyway" : ""}</div>
           ${r.unit_filter ? `<div class="constraint">⚠ ${r.unit_filter}</div>` : ""}
+          ${r.current_deal ? `<div class="deal">★ ${r.current_deal}</div>` : ""}
           ${safetyTxt ? `<div class="safety">Safety: ${safetyTxt}</div>` : ""}
           ${bnote ? `<div class="bnote">${bnote}</div>` : ""}
           <div class="neigh"><a href="${r.url}" target="_blank" rel="noopener">view listing →</a></div>
