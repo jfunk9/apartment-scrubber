@@ -1,5 +1,5 @@
 """
-Apartment Radar — Downtown Minneapolis 1BR / Loft / Den scraper.
+Apartment Finder — Downtown Minneapolis 1BR / Loft / Den scraper.
 
 Same shape as Job Radar / RFP Scrubber:
   buildings.csv  -->  apartment_scraper.py  -->  listings.json  -->  index.html

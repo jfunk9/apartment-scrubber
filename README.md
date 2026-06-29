@@ -1,4 +1,4 @@
-# Apartment Radar — Downtown Minneapolis
+# Apartment Finder — Downtown Minneapolis
 
 Personal apartment-tracking tool. Same shape as Job Radar and the RFP scrubber.
 
