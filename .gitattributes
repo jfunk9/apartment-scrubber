@@ -1,0 +1,14 @@
+# Added 2026-08-02. These repos had no .gitattributes and no core.autocrlf, so
+# every text file read as modified forever — which buried the files that had real
+# edits. Same fix as abstracti.co / jasonenglund.com.
+* text=auto eol=lf
+
+*.woff2 binary
+*.woff  binary
+*.ttf   binary
+*.otf   binary
+*.png   binary
+*.jpg   binary
+*.jpeg  binary
+*.gif   binary
+*.ico   binary
