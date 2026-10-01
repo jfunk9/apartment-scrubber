@@ -62,7 +62,7 @@ Cost fit decays linearly: 1.0 at <=$2,200 all-in → 0.0 at $2,800 all-in.
 
 `rent + parking(~$175 if extra) + electric(~$70–100) + internet($80)`
 
-Tuned to Jason's current 2900 Lagoon setup: $2,100 rent + $150 parking + $150 electric + $80 internet = **$2,480**.
+Compare each listing's all-in monthly cost against your own current setup (set your own figure when you adapt this).
 
 ## Filters (drops)
 
