@@ -87,4 +87,4 @@ Once the public repo exists at `W:\AI\GitHub\apartment-scrubber`, the scraper au
 ## Sister projects
 
 - Job Radar — `W:\AI\Anthropic\projects\Job scrubber\` (jfunk9.github.io/job-scrubber)
-- RFP scrubber — `W:\AI\Anthropic\projects\RFP scrubber\` (jfunk9.github.io/RFP-scrubber)
+- RFP scrubber — `W:\AI\Anthropic\projects\RFP scrubber\`
